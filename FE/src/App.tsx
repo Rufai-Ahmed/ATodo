@@ -5,6 +5,8 @@ import { FcCheckmark } from "react-icons/fc";
 import { deleteTask, getTodos, updateTask } from "../API/API";
 import moment from "moment";
 import { CreateTodo } from "./CreateTodo";
+import music from "./Assets/Rema_-_DND.mp3";
+
 function App() {
   const [state, setState]: Array<any> = useState<Array<{}>>([]);
   const [show, setShow] = useState(false);
@@ -14,6 +16,11 @@ function App() {
       setState(res);
     });
   }, [state]);
+
+  const myAlarm = () => {
+    let audio = new Audio(music);
+    return audio.pause();
+  };
 
   return (
     <>
@@ -26,6 +33,9 @@ function App() {
               .filter((el: any) => el.done === "start")
               .map((el: any) => (
                 <Card key={el._id}>
+                  <div style={{ display: "none" }}>
+                    {el.timeAchieved === true ? `${myAlarm()}` : null}
+                  </div>
                   <Icon />
 
                   <Task>{el.task}</Task>
@@ -77,6 +87,8 @@ function App() {
                     <div style={{ display: "flex", gap: "10px" }}>
                       <Button
                         onClick={() => {
+                          console.log(el);
+
                           updateTask(el._id);
                         }}
                       >
@@ -226,7 +238,6 @@ const CardHolder = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 30px;
-
   padding-bottom: 30px;
 `;
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { statusCode } from "../utils/statusCode";
+import { processes, statusCode } from "../utils/statusCode";
 import todoModel, { iTodo } from "../model/todoModel";
 import moment from "moment";
 
@@ -41,7 +41,7 @@ export const updateTodo = async (req: Request, res: Response) => {
     if (checker?.done === "start") {
       const todo = await todoModel.findByIdAndUpdate(
         { _id: todoID },
-        { done: "ongoing" },
+        { done: processes.ONGOING },
         { new: true }
       );
       res.status(statusCode.OK).json({
@@ -52,7 +52,7 @@ export const updateTodo = async (req: Request, res: Response) => {
       const todo = await todoModel.findByIdAndUpdate(
         { _id: todoID },
         {
-          done: "finished",
+          done: processes.FINISHED,
           deadline: moment(new Date().getTime()).format("LLLL"),
         },
         { new: true }
